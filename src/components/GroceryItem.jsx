@@ -1,3 +1,4 @@
+// src/components/GroceryItem.jsx
 function GroceryItem({ item }) {
   return (
     <div className="grocery-item">
