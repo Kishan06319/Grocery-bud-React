@@ -1,3 +1,4 @@
+// src/App.jsx
 function App() {
   return (
     <main>
