@@ -6,6 +6,7 @@ main {
   padding: 2rem;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  font-family: Arial, sans-serif;
 }
 
 form {
@@ -21,7 +22,8 @@ input {
   border-radius: 4px;
 }
 
-button {
+form button,
+.clear-btn {
   padding: 0.5rem 1rem;
   margin-left: 0.5rem;
   background: #007bff;
@@ -31,7 +33,8 @@ button {
   cursor: pointer;
 }
 
-button:hover {
+form button:hover,
+.clear-btn:hover {
   background: #0056b3;
 }
 
@@ -52,15 +55,15 @@ button:hover {
 
 .edit-btn,
 .remove-btn {
-  border: none;
   background: transparent;
+  border: none;
   cursor: pointer;
-  font-size: 1rem;
 }
 
 .edit-btn svg {
   color: #007bff;
   font-size: 1.2rem;
+  transition: color 0.2s ease;
 }
 
 .edit-btn:hover svg {
@@ -70,6 +73,7 @@ button:hover {
 .remove-btn svg {
   color: #dc3545;
   font-size: 1.2rem;
+  transition: color 0.2s ease;
 }
 
 .remove-btn:hover svg {
