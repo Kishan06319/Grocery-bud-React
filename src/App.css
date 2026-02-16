@@ -1,23 +1,36 @@
-form {
-  margin-bottom: 1rem;
-}
-
-input {
-  padding: 0.5rem;
-  border: 1px solid #ccc;
+.grocery-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f4f4f4;
+  margin: 0.5rem 0;
+  padding: 0.5rem 1rem;
   border-radius: 4px;
 }
 
-button {
-  padding: 0.5rem 1rem;
-  margin-left: 0.5rem;
-  background: #007bff;
+.remove-btn {
+  background: #dc3545;
   color: white;
   border: none;
+  padding: 0.3rem 0.7rem;
   border-radius: 4px;
   cursor: pointer;
 }
 
-button:hover {
-  background: #0056b3;
+.remove-btn:hover {
+  background: #a71d2a;
+}
+
+.clear-btn {
+  margin-top: 1rem;
+  background: #6c757d;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.clear-btn:hover {
+  background: #5a6268;
 }
