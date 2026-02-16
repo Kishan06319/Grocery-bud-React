@@ -5,11 +5,23 @@ import GroceryItem from "./components/GroceryItem";
 function App() {
   const [items, setItems] = useState([]);
   const [input, setInput] = useState("");
+  const [isEditing, setIsEditing] = useState(false);
+  const [editIndex, setEditIndex] = useState(null);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!input) return;
-    setItems([...items, input]);
+
+    if (isEditing) {
+      const updatedItems = items.map((item, index) =>
+        index === editIndex ? input : item,
+      );
+      setItems(updatedItems);
+      setIsEditing(false);
+      setEditIndex(null);
+    } else {
+      setItems([...items, input]);
+    }
     setInput("");
   };
 
@@ -17,8 +29,17 @@ function App() {
     setItems(items.filter((_, i) => i !== index));
   };
 
+  const handleEdit = (index) => {
+    setIsEditing(true);
+    setEditIndex(index);
+    setInput(items[index]);
+  };
+
   const handleClear = () => {
     setItems([]);
+    setIsEditing(false);
+    setEditIndex(null);
+    setInput("");
   };
 
   return (
@@ -31,7 +52,7 @@ function App() {
           onChange={(e) => setInput(e.target.value)}
           placeholder="Enter grocery item"
         />
-        <button type="submit">Add Item</button>
+        <button type="submit">{isEditing ? "Update Item" : "Add Item"}</button>
       </form>
       <section>
         {items.map((item, index) => (
@@ -39,6 +60,7 @@ function App() {
             key={index}
             item={item}
             onRemove={() => handleRemove(index)}
+            onEdit={() => handleEdit(index)}
           />
         ))}
       </section>
