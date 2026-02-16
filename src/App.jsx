@@ -13,6 +13,14 @@ function App() {
     setInput("");
   };
 
+  const handleRemove = (index) => {
+    setItems(items.filter((_, i) => i !== index));
+  };
+
+  const handleClear = () => {
+    setItems([]);
+  };
+
   return (
     <main>
       <h2>Grocery Bud</h2>
@@ -25,9 +33,20 @@ function App() {
         />
         <button type="submit">Add Item</button>
       </form>
-      {items.map((item, index) => (
-        <GroceryItem key={index} item={item} />
-      ))}
+      <section>
+        {items.map((item, index) => (
+          <GroceryItem
+            key={index}
+            item={item}
+            onRemove={() => handleRemove(index)}
+          />
+        ))}
+      </section>
+      {items.length > 0 && (
+        <button className="clear-btn" onClick={handleClear}>
+          Clear All
+        </button>
+      )}
     </main>
   );
 }
