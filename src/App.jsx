@@ -1,71 +1,84 @@
-// src/App.jsx
-import { useState } from "react";
-import GroceryItem from "./components/GroceryItem";
+import React, { useState, useEffect, useRef } from "react";
 
 function App() {
-  const [items, setItems] = useState([]);
+  const [items, setItems] = useState(() => {
+    const saved = localStorage.getItem("grocery-list");
+    return saved ? JSON.parse(saved) : [];
+  });
   const [input, setInput] = useState("");
   const [isEditing, setIsEditing] = useState(false);
-  const [editIndex, setEditIndex] = useState(null);
+  const [editId, setEditId] = useState(null);
+  const inputRef = useRef(null);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  useEffect(() => {
+    localStorage.setItem("grocery-list", JSON.stringify(items));
+  }, [items]);
+
+  const addItem = () => {
     if (!input) return;
-
     if (isEditing) {
-      const updatedItems = items.map((item, index) =>
-        index === editIndex ? input : item,
+      setItems(
+        items.map((item) =>
+          item.id === editId ? { ...item, title: input } : item,
+        ),
       );
-      setItems(updatedItems);
       setIsEditing(false);
-      setEditIndex(null);
+      setEditId(null);
     } else {
-      setItems([...items, input]);
+      setItems([...items, { id: Date.now(), title: input }]);
     }
     setInput("");
   };
 
-  const handleRemove = (index) => {
-    setItems(items.filter((_, i) => i !== index));
-  };
-
-  const handleEdit = (index) => {
+  const editItem = (id) => {
+    const item = items.find((i) => i.id === id);
     setIsEditing(true);
-    setEditIndex(index);
-    setInput(items[index]);
+    setEditId(id);
+    setInput(item.title);
+    inputRef.current.focus(); // auto-focus input
   };
 
-  const handleClear = () => {
+  const removeItem = (id) => {
+    setItems(items.filter((i) => i.id !== id));
+  };
+
+  const clearItems = () => {
     setItems([]);
-    setIsEditing(false);
-    setEditIndex(null);
-    setInput("");
   };
 
   return (
     <main>
-      <h2>Grocery Bud</h2>
-      <form onSubmit={handleSubmit}>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          addItem();
+        }}
+      >
         <input
-          type="text"
+          ref={inputRef}
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          placeholder="Enter grocery item"
+          placeholder="Enter item"
         />
-        <button type="submit">{isEditing ? "Update Item" : "Add Item"}</button>
+        <button type="submit">{isEditing ? "Update" : "Add"}</button>
       </form>
-      <section>
-        {items.map((item, index) => (
-          <GroceryItem
-            key={index}
-            item={item}
-            onRemove={() => handleRemove(index)}
-            onEdit={() => handleEdit(index)}
-          />
-        ))}
-      </section>
+
+      {items.map((item) => (
+        <div key={item.id} className="grocery-item">
+          <span>{item.title}</span>
+          <div className="actions">
+            <button className="edit-btn" onClick={() => editItem(item.id)}>
+              ✏️
+            </button>
+            <button className="remove-btn" onClick={() => removeItem(item.id)}>
+              ❌
+            </button>
+          </div>
+        </div>
+      ))}
+
       {items.length > 0 && (
-        <button className="clear-btn" onClick={handleClear}>
+        <button className="clear-btn" onClick={clearItems}>
           Clear All
         </button>
       )}
